@@ -46,7 +46,7 @@ const RegisterPage = () => {
 
   return (
     <AuthLayout title="Criar sua conta" subtitle="Comece a controlar suas finanças hoje.">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
         <Input
           label="Nome"
           type="text"

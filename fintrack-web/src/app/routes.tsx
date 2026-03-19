@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/authStore';
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
+const TransactionsPage = lazy(() => import('@/pages/TransactionsPage'));
 
 /**
  * Componente que protege rotas privadas.
@@ -40,6 +41,7 @@ export const AppRoutes = () => (
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/transactions" element={<TransactionsPage />} />
       </Route>
 
       {/* Redireciona raiz para dashboard (ou login se não autenticado) */}

@@ -2,15 +2,15 @@
 
 Sistema de controle financeiro pessoal desenvolvido com **.NET 8** (Clean Architecture) e **React 18** (TypeScript). Permite gerenciar receitas, despesas, categorias e transações recorrentes, com autenticação segura via JWT.
 
-> Projeto em desenvolvimento ativo — Fase 1 (autenticação) concluída.
+> Projeto em desenvolvimento ativo — Fase 2 (transações e categorias) concluída.
 
 ---
 
 ## Funcionalidades
 
 - **Autenticação completa** — registro, login, refresh token com rotação, logout
-- **Gestão de transações** — receitas e despesas com categorização *(Fase 2)*
-- **Categorias personalizadas** — sistema + categorias do usuário *(Fase 2)*
+- **Gestão de transações** — CRUD de receitas e despesas com filtros, paginação e resumo financeiro
+- **Categorias** — categorias do sistema + personalizadas por usuário
 - **Dashboard financeiro** — resumo mensal, gráficos e saldo *(Fase 3)*
 - **FinScore** — pontuação de saúde financeira 0–100 *(Fase 4)*
 - **Transações recorrentes** — geração automática de lançamentos *(Fase 4)*
@@ -140,8 +140,9 @@ Acesse `http://localhost:5173`
 
 ---
 
-## API — Endpoints de autenticação
+## API — Endpoints
 
+### Autenticação
 | Método | Endpoint | Descrição | Auth |
 |---|---|---|---|
 | `POST` | `/api/auth/register` | Cadastro de novo usuário | — |
@@ -149,14 +150,29 @@ Acesse `http://localhost:5173`
 | `POST` | `/api/auth/refresh` | Renova access token via cookie | — |
 | `POST` | `/api/auth/logout` | Revoga refresh token | Bearer |
 
-> Os demais endpoints (transações, categorias, dashboard) serão adicionados nas próximas fases.
+### Transações
+| Método | Endpoint | Descrição | Auth |
+|---|---|---|---|
+| `GET` | `/api/transactions` | Lista paginada com filtros (`startDate`, `endDate`, `categoryId`, `type`, `page`, `pageSize`) | Bearer |
+| `GET` | `/api/transactions/{id}` | Busca transação por ID | Bearer |
+| `POST` | `/api/transactions` | Cria nova transação | Bearer |
+| `PUT` | `/api/transactions/{id}` | Atualiza transação | Bearer |
+| `DELETE` | `/api/transactions/{id}` | Remove transação (soft delete) | Bearer |
+
+### Categorias
+| Método | Endpoint | Descrição | Auth |
+|---|---|---|---|
+| `GET` | `/api/categories` | Lista categorias do sistema + do usuário | Bearer |
+| `POST` | `/api/categories` | Cria categoria personalizada | Bearer |
+| `PUT` | `/api/categories/{id}` | Atualiza categoria do usuário | Bearer |
+| `DELETE` | `/api/categories/{id}` | Remove categoria (soft delete) | Bearer |
 
 ---
 
 ## Roadmap
 
 - [x] **Fase 1** — Autenticação JWT completa + telas de Login/Registro
-- [ ] **Fase 2** — CRUD de Transações e Categorias
+- [x] **Fase 2** — CRUD de Transações e Categorias + listagem com filtros e paginação
 - [ ] **Fase 3** — Dashboard com gráficos e resumo mensal
 - [ ] **Fase 4** — FinScore + Projeções + Transações Recorrentes
 - [ ] **Fase 5** — Testes automatizados + CI/CD + Deploy (Fly.io + Neon + Vercel)

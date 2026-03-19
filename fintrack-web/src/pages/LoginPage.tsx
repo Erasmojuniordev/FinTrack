@@ -33,7 +33,7 @@ const LoginPage = () => {
 
   return (
     <AuthLayout title="Bem-vindo de volta" subtitle="Entre na sua conta para continuar.">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
         <Input
           label="E-mail"
           type="email"

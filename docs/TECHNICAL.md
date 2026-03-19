@@ -571,6 +571,14 @@ A cada `/refresh`, o token antigo é **revogado** e um novo é emitido. Se o mes
 
 ## 7. API Endpoints
 
+### Dashboard (`/api/dashboard`)
+
+| Método | Rota | Auth | Query Params | Descrição |
+|---|---|---|---|---|
+| GET | `/api/dashboard/summary` | JWT | `startDate`, `endDate` | Receitas, despesas, saldo e taxa de poupança |
+| GET | `/api/dashboard/expenses-by-category` | JWT | `startDate`, `endDate` | Gastos agrupados por categoria com percentual |
+| GET | `/api/dashboard/trend` | JWT | `months` (1–24, default 6) | Tendência mensal de receitas vs despesas |
+
 ### Autenticação (`/api/auth`)
 
 | Método | Rota | Auth | Body | Resposta |
@@ -580,21 +588,36 @@ A cada `/refresh`, o token antigo é **revogado** e um novo é emitido. Se o mes
 | POST | `/api/auth/refresh` | Cookie | — | 200: `{ accessToken, expiresAt, user }` + cookie |
 | POST | `/api/auth/logout` | JWT | — | 204: No Content |
 
-### Transações (`/api/transactions`) — Fase 2
+### Transações (`/api/transactions`)
 
 | Método | Rota | Auth | Descrição |
 |---|---|---|---|
-| GET | `/api/transactions` | JWT | Listagem paginada com filtros |
-| GET | `/api/transactions/{id}` | JWT | Detalhe |
-| POST | `/api/transactions` | JWT | Criar |
-| PUT | `/api/transactions/{id}` | JWT | Atualizar |
+| GET | `/api/transactions` | JWT | Listagem paginada com filtros e resumo |
+| GET | `/api/transactions/{id}` | JWT | Detalhe por ID |
+| POST | `/api/transactions` | JWT | Criar transação |
+| PUT | `/api/transactions/{id}` | JWT | Atualizar transação |
 | DELETE | `/api/transactions/{id}` | JWT | Soft delete |
 
-Query params: `page`, `size`, `type`, `categoryId`, `from`, `to`, `search`, `sort`
+Query params: `startDate`, `endDate`, `categoryId`, `type` (1=Receita, 2=Despesa), `page`, `pageSize`
 
-### Categorias, Recorrências, Dashboard, Analytics
+Resposta do `GET /api/transactions`:
+```json
+{
+  "items": [...],
+  "page": 1, "pageSize": 20, "totalCount": 42, "totalPages": 3,
+  "hasPreviousPage": false, "hasNextPage": true,
+  "summary": { "totalIncomeInCents": 800000, "totalExpenseInCents": 210000, "balanceInCents": 590000 }
+}
+```
 
-Ver [escopo completo](../fintrack-escopo.pdf) para endpoints das Fases 2–4.
+### Categorias (`/api/categories`)
+
+| Método | Rota | Auth | Descrição |
+|---|---|---|---|
+| GET | `/api/categories` | JWT | Lista categorias do sistema + do usuário |
+| POST | `/api/categories` | JWT | Criar categoria personalizada |
+| PUT | `/api/categories/{id}` | JWT | Atualizar categoria própria |
+| DELETE | `/api/categories/{id}` | JWT | Soft delete (rejeita se há transações vinculadas) |
 
 ### Formato de Erro Padrão
 
@@ -849,21 +872,25 @@ cd fintrack-web && npm run build
 - [x] Telas de Login e Registro com validação e animações
 - [x] CLAUDE.md e .gitignore
 
-### Fase 2 — CRUD Core
-- [ ] Repositórios concretos: `TransactionRepository`, `CategoryRepository`, `RecurringTransactionRepository`
-- [ ] Commands/Queries: `CreateTransaction`, `GetTransactions` (paginado + filtros), `UpdateTransaction`, `DeleteTransaction`
-- [ ] Commands/Queries: `CreateCategory`, `GetCategories`, `UpdateCategory`, `DeleteCategory`
-- [ ] Endpoints `GET /api/transactions` com paginação, filtros e ordenação
-- [ ] Seed de categorias padrão visível na tela
-- [ ] Telas Transações e Categorias com CRUD completo no frontend
+### Fase 2 — CRUD Core (Concluída)
+- [x] `CategoryRepository` e `TransactionRepository` concretos no Infrastructure
+- [x] Commands: `CreateTransaction`, `UpdateTransaction`, `DeleteTransaction`, `CreateCategory`, `UpdateCategory`, `DeleteCategory`
+- [x] Queries: `GetTransactions` (paginada com filtros por data, categoria e tipo), `GetTransactionById`, `GetCategories`
+- [x] DTOs: `TransactionDto`, `PagedTransactionsDto` com `TransactionSummaryDto` (receitas/despesas/saldo)
+- [x] Endpoints `GET /api/transactions` com paginação, filtros e resumo financeiro
+- [x] Endpoints CRUD `/api/categories`
+- [x] `transactionStore` (Zustand) com fetch, create, update, delete e paginação
+- [x] `TransactionsPage` com resumo financeiro, lista e painel lateral de criação/edição
+- [x] `TransactionForm` com React Hook Form + Zod
+- [x] Dashboard com sidebar de navegação
 
-### Fase 3 — Dashboard e Visualizações
-- [ ] Queries de agregação: `GetDashboardSummary`, `GetExpensesByCategory`, `GetRevenueVsExpenseTrend`
-- [ ] Endpoints `/api/dashboard/*`
-- [ ] Wrappers de gráficos Recharts (Bar, Area, Donut, Line)
-- [ ] Cards animados com CountUp
-- [ ] Seletor temporal (mês/ano + atalhos rápidos)
-- [ ] Dark/light mode refinado + responsividade mobile
+### Fase 3 — Dashboard e Visualizações (Concluída)
+- [x] Queries de agregação: `GetDashboardSummaryQuery`, `GetExpensesByCategoryQuery`, `GetRevenueVsExpenseTrendQuery`
+- [x] Endpoints `/api/dashboard/summary`, `/api/dashboard/expenses-by-category`, `/api/dashboard/trend`
+- [x] Wrappers de gráficos Recharts: `AreaTrendChart` (receitas vs despesas), `DonutCategoryChart` (gastos por categoria)
+- [x] Cards animados com CountUp via `requestAnimationFrame` (sem dependência externa)
+- [x] Seletor temporal com atalhos: Este mês, 3 meses, 6 meses, Este ano
+- [x] 4 cards de resumo: Receitas, Despesas, Saldo, Taxa de poupança
 
 ### Fase 4 — Inteligência Financeira
 - [ ] `FinScoreCalculator` com 5 indicadores ponderados

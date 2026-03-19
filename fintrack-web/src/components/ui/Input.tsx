@@ -9,8 +9,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 /**
- * Componente de input com suporte a label, ícones e mensagem de erro.
- * Exibe borda vermelha e mensagem quando há erro de validação.
+ * Componente de input com suporte a label, ícones laterais e mensagem de erro.
+ * O padding é definido via inline style para garantir compatibilidade com Tailwind v4.
  */
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, leftIcon, rightIcon, id, ...props }, ref) => {
@@ -21,15 +21,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-[var(--color-text-primary)]"
+            className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-secondary)]"
           >
             {label}
           </label>
         )}
 
-        <div className="relative">
+        <div className="relative flex items-center">
           {leftIcon && (
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]">
+            <span className="pointer-events-none absolute left-3 flex items-center text-[var(--color-text-secondary)]">
               {leftIcon}
             </span>
           )}
@@ -38,27 +38,34 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full h-10 bg-[var(--color-surface)] border rounded-lg text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] transition-colors duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]',
-              leftIcon ? 'pl-10 pr-4' : 'px-4',
-              rightIcon ? 'pr-10' : '',
+              'w-full h-11 rounded-xl text-sm text-[var(--color-text-primary)] transition-all duration-200',
+              'bg-[var(--color-surface-elevated)] border',
+              'placeholder:text-[var(--color-text-secondary)]/50',
+              'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 focus:border-[var(--color-primary)]',
               error
-                ? 'border-[var(--color-danger)] focus:ring-[var(--color-danger)]'
+                ? 'border-[var(--color-danger)] focus:ring-[var(--color-danger)]/20'
                 : 'border-[var(--color-border)]',
               className
             )}
+            /* Padding via inline style para evitar problema com classes dinâmicas no Tailwind v4 */
+            style={{
+              paddingLeft: leftIcon ? '2.5rem' : '0.875rem',
+              paddingRight: rightIcon ? '2.75rem' : '0.875rem',
+            }}
             {...props}
           />
 
           {rightIcon && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]">
+            <span className="absolute right-3 flex items-center">
               {rightIcon}
             </span>
           )}
         </div>
 
         {error && (
-          <p className="text-xs text-[var(--color-danger)]">{error}</p>
+          <p className="text-xs text-[var(--color-danger)] flex items-center gap-1">
+            {error}
+          </p>
         )}
       </div>
     );

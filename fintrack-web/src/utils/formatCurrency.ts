@@ -15,3 +15,9 @@ export const formatCurrency = (amountInCents: number, currency = 'BRL'): string 
  * Ex: 1500.50 → 150050
  */
 export const toCents = (amount: number): number => Math.round(amount * 100);
+
+/**
+ * Converte centavos para decimal.
+ * Ex: 150050 → 1500.50
+ */
+export const fromCents = (cents: number): number => cents / 100;

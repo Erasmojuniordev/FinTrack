@@ -5,8 +5,9 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-background: #FFFFFF;
-  --color-surface: #F8FAFC;
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
   --color-primary: #3B82F6;
   --color-primary-hover: #2563EB;
   --color-text-primary: #0F172A;
@@ -16,40 +17,50 @@
   --color-warning: #D97706;
   --color-border: #E2E8F0;
 
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .dark {
-  --color-background: #0F172A;
-  --color-surface: #1E293B;
+  --color-background: #080F1E;
+  --color-surface: #0F1629;
+  --color-surface-elevated: #1A2540;
   --color-primary: #60A5FA;
   --color-primary-hover: #3B82F6;
   --color-text-primary: #F1F5F9;
-  --color-text-secondary: #94A3B8;
+  --color-text-secondary: #64748B;
   --color-success: #34D399;
   --color-danger: #F87171;
   --color-warning: #FBBF24;
-  --color-border: #334155;
+  --color-border: #1E2D4A;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/*
+ * Reset dentro de @layer base — garante que as classes utilitárias do Tailwind
+ * (py-2, px-5, etc.) possam sobrescrevê-lo na cascata. Em Tailwind v4, regras
+ * fora de @layer têm prioridade sobre qualquer layer, bloqueando padding/margin.
+ */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-html {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  transition: background-color 0.2s, color 0.2s;
-}
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    transition: background-color 0.2s, color 0.2s;
+  }
 
-#root {
-  min-height: 100svh;
+  #root {
+    min-height: 100svh;
+  }
 }

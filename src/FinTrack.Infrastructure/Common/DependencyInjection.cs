@@ -1,5 +1,6 @@
 using System.Text;
 using FinTrack.Application.Interfaces;
+using FinTrack.Domain.Interfaces;
 using FinTrack.Infrastructure.Identity;
 using FinTrack.Infrastructure.Persistence;
 using FinTrack.Infrastructure.Persistence.Interceptors;
@@ -79,6 +80,10 @@ public static class DependencyInjection
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+        // Repositórios de negócio
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         return services;
     }
