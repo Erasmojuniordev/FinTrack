@@ -1,0 +1,66 @@
+# ==========================================
+# .NET / Visual Studio
+# ==========================================
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.ncrunch*
+*.DotSettings.user
+.idea/
+
+# Migrations podem ser commitadas (são parte do projeto)
+# !src/**/Migrations/
+
+# Arquivos de configuração com segredos
+# appsettings.Development.json PODE ser commitado (contém apenas valores de dev, não segredos reais)
+# Em produção, use variáveis de ambiente
+appsettings.Production.json
+appsettings.Staging.json
+secrets.json
+
+# Artefatos de publicação
+publish/
+*.nupkg
+
+# ==========================================
+# Node / Frontend
+# ==========================================
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Variáveis de ambiente (contêm segredos)
+.env
+.env.local
+.env.production
+.env.staging
+# .env.example pode ser commitado
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cache do Vite
+.vite/
+
+# ==========================================
+# Sistema Operacional
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# Editores
+# ==========================================
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
